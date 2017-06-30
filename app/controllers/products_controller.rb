@@ -7,30 +7,32 @@ class ProductsController < ApplicationController
 
   def create
     product = Product.new(product_params)
-    if product.save?
+    if product.save
       render json: product, status: :ok
+    else
+      render json: {
+        message: 'no se pudo crear el Producto',
+        errors: product.errors.full_messages
+      }
     end
-    render json: {
-      message: 'no se pudo crear el Producto',
-      errors: product.error.full_messages
-    }
   end
 
   def show
     product = Product.find_by(id: params[:id])
     if product
       render json: product, status: :ok
+    else
+      render json: {
+        message: 'No se encontro el Producto solicitado'
+      }
     end
-    render json: {
-      message: 'No se encontro el Producto solicitado'
-    }
   end
 
   def new
     @product
   end
 
-  def udpate
+  def update
     product = Product.find_by(id: params[:id])
     product.update_attributes(product_params)
     render json: product, status: :ok
@@ -41,8 +43,9 @@ class ProductsController < ApplicationController
     if product
       product.destroy
       render json: {message: 'Se ha eliminado un producto'}, status: :ok
+    else
+      render json: {message: 'No se udo eliminar el producto'}
     end
-    render json: {message: 'No se udo eliminar el producto'}
   end
 
   private
@@ -52,6 +55,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.permit(:name, :description)
+    params.require(:product).permit(:name, :description, :author)
   end
 end

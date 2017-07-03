@@ -13,7 +13,7 @@ class ProductsController < ApplicationController
       render json: {
         message: 'no se pudo crear el Producto',
         errors: product.errors.full_messages
-      }
+      }, status: :bad_request
     end
   end
 
@@ -38,13 +38,15 @@ class ProductsController < ApplicationController
     render json: product, status: :ok
   end
 
-  def delete
+  def destroy
     product = Product.find_by(id: params[:id])
     if product
       product.destroy
-      render json: {message: 'Se ha eliminado un producto'}, status: :ok
+      # flash[:notice] = 'Se ha borrado el producto'
+      redirect_to products_path, status: :ok
     else
-      render json: {message: 'No se udo eliminar el producto'}
+      flash[:alert]= 'No se pudo borrar el elemento'
+      render products_path, status: :bad_request
     end
   end
 
@@ -55,6 +57,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :description, :author)
+    params.require(:product).permit(:name, :description, :quantity)
   end
 end

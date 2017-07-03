@@ -1,1 +1,17 @@
-= render partial: 'product_form'
+%section
+  %header
+    %h1 Productos
+  = render partial: 'product_form'
+  %hr/
+  .product_list
+    -@products.each do |p|
+      .product_box
+        %h4
+          = p.name
+        %p
+          = p.description
+        %p
+          = p.quantity
+        %p
+          = link_to 'Borrar', destroy_product_path(p), method: :delete
+      %hr/

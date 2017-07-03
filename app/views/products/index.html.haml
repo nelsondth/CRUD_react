@@ -9,9 +9,8 @@
         %h4
           = p.name
         %p
-          = p.description
-        %p
           = p.quantity
         %p
           = link_to 'Borrar', destroy_product_path(p), method: :delete
+          = link_to 'Detalles', product_path(p)
       %hr/

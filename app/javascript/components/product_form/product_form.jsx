@@ -18,6 +18,7 @@ class ProductForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.validate = this.validate.bind(this)
     this.productTemplate = this.productTemplate.bind(this)
+    this.clearState = this.clearState.bind(this)
   }
 
   handleChange(e) {
@@ -58,10 +59,19 @@ class ProductForm extends React.Component {
         "</p>",
         "<hr/>",
         "<p>",
-          "<a href=/product/"+product.id+" datamethod='delete'>Borrar</a>",
+          "<a href=/product/"+product.id+" data-method='delete'>Borrar</a>",
+          "<a href=/products/"+product.id+" >Detalles</a>",
         "</p>",
       "</div>",
     ].join('\n')
+  }
+
+  clearState(){
+    this.setState({
+      name: '',
+      description: '',
+      quantity: 1
+    })
   }
 
   handleSubmit(){
@@ -80,6 +90,7 @@ class ProductForm extends React.Component {
     }).then(function (response) {
       return response.json()
     }).then(function (data) {
+      that.clearState()
       var productsEl = document.getElementsByClassName('product_list')
       productsEl[0].innerHTML = productsEl[0].innerHTML + that.productTemplate(data)
     })

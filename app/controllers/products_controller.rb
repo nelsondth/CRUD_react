@@ -18,6 +18,10 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @product_id = params[:id]
+  end
+
+  def get_product
     product = Product.find_by(id: params[:id])
     if product
       render json: product, status: :ok
@@ -43,10 +47,10 @@ class ProductsController < ApplicationController
     if product
       product.destroy
       # flash[:notice] = 'Se ha borrado el producto'
-      redirect_to products_path, status: :ok
+      redirect_to products_path, status: 302
     else
       flash[:alert]= 'No se pudo borrar el elemento'
-      render products_path, status: :bad_request
+      redirect_to products_path, status: :bad_request
     end
   end
 
